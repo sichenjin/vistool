@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom,null, {renderer: 'svg'});
+var app = {};
+///////////////////////// 自定义数值格式：
+// color 统一：
+var color = ['#4575b4','#d73027','#1a9850','#fc8d59','#542788','#01665e','#c51b7d','#e9a3c9','#91cf60','#67a9cf','#ef8a62','#af8dc3']
+
+// 线宽
+var lineWidth = 3
+var lineStyle = {
+                width: lineWidth
+            }
+// 字体大小
+var fontSize = 20
+
+
+// type 表示需要画的图形，这里我们选择折线图，所以是line
+// lineStyle 指定线宽、颜色等，默认使用统一值
+// 每一个dict是一条线，data是对应X轴的Y值
+
+///////////////////////// end of 自定义数值
+option = null;
+
+option = {
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    title: {
+        text: '',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'axis',
+        padding: [2, 10],
+        textStyle: {
+            fontSize: 16
+        }
+    },
+    xAxis: {
+        type: 'category',
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                width: 3
+            }
+        },
+        axisTick: {
+            show: true,
+            alignWithLabel: true,
+            lineStyle: {
+                width:3
+            }
+        },
+        axisLabel: {
+            rotate: 45,
+            fontWeight: "bold",
+            formatter: function(value) {
+                return value.split(" ")[1];
+            }
+        },
+        data: ["2017-09-11 16:23:34", "2017-09-11 16:28:34", "2017-09-11 16:33:34", "2017-09-11 16:38:34", "2017-09-11 16:43:34", "2017-09-11 16:48:34", "2017-09-11 16:53:34"]
+    },
+    grid: {
+        left: '2%',
+        right: '4%',
+        bottom: '4%',
+        containLabel: true
+    },
+    visualMap: [//设置线的映射颜色，可以按y值设置，可以按照x值设置，可以渐变，
+    //具体可以看visualmap 配置项说明,也可以问我
+        {
+        
+        show: false,
+        pieces: [{
+            gt: 0,
+            lte: 100,
+            color: 'red'
+        }, {
+            gt: 100,
+            color: 'blue'
+        }],
+        seriesIndex: 1
+    },{
+        show: false,
+        pieces: [{
+            gt: 0,
+            lte: 80,
+            color: 'yellow'
+        }, {
+            gt: 80,
+            color: 'blue'
+        }],
+        seriesIndex: 0}],
+    yAxis: {
+        type: 'value',
+        name: 'M',
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                width: 3
+            }
+        },
+        axisTick: {
+            lineStyle: {
+                width: 3
+            }
+        },
+        axisLabel: {
+            fontWeight: "bold",
+        }
+    },
+    series: [  //series中每个对象为一条线
+        {
+        type: 'line',
+        symbol: 'circle',//线上的圆点
+        symbolSize: 10,//圆点半径
+        smooth: true,//折线or顺滑
+        // animationDuration: 2000,
+        itemStyle: {
+            normal: {
+                color: 'rgb(103, 99, 99)',
+                shadowBlur: 2,
+                shadowColor: "rgba(0, 0, 0, .12)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        },
+        lineStyle: {
+            normal: {
+                width: 3,
+                shadowColor: 'rgba(0,0,0,0.4)',
+                shadowBlur: 10,
+                shadowOffsetX: 4,
+                shadowOffsetY: 10
+            }
+        },
+        data: [120, 90, 34, 65, 89, 201, 130], //线的坐标
+        markLine: {  //箭头线
+            silent: true,
+            data: [{
+                yAxis: 100
+            }]
+        },
+        markPoint: { // ”触发“ markpoint
+            label: {
+                normal: {
+                    show: true,
+                    align: 'center',
+                    color: 'WHITE',
+                    fontWeight: 100,
+                    formatter: '{b}'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: {
+                        type: 'radial',
+                        x: 0.4,
+                        y: 0.4,
+                        r: 0.9,
+                        colorStops: [{
+                            offset: 0,
+                            color: '#51e0a2'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(33,150,243)'
+                        }],
+                        globalCoord: false
+                    },
+                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                    shadowBlur: 10,
+                }
+            },
+            data: [{
+                name: '触发',
+                value: 120,
+                coord: [0, 120]
+            }]
+        }
+    }, {
+        type: 'line',
+        symbol: 'circle',
+        symbolSize: 10,
+        smooth: true,
+        animationDuration: 2000,
+        itemStyle: {
+            normal: {
+                color: 'rgb(103, 99, 99)',
+                shadowBlur: 2,
+                shadowColor: "rgba(0, 0, 0, .12)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        },
+        lineStyle: {
+            normal: {
+                width: 3,
+                shadowColor: 'rgba(0,0,0,0.4)',
+                shadowBlur: 10,
+                shadowOffsetX: 4,
+                shadowOffsetY: 10
+            }
+        },
+        data: [10, 40, 74, 83, 120, 146, 180]
+    }, {
+        type: 'line',
+        symbol: 'circle',
+        symbolSize: 10,
+        smooth: true,
+        animationDuration: 2000,
+        itemStyle: {
+            normal: {
+                color: 'rgb(103, 99, 99)',
+                shadowBlur: 2,
+                shadowColor: "rgba(0, 0, 0, .12)",
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        },
+        lineStyle: {
+            normal: {
+                color: color[4],
+                width: 3,
+                shadowColor: 'rgba(0,0,0,0.4)',
+                shadowBlur: 10,
+                shadowOffsetX: 4,
+                shadowOffsetY: 10
+            }
+        },
+        data: [30, 25, 74, 143, 93, 100, 135]
+    }]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

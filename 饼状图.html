@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom,null, {renderer: 'svg'});
+
+var app = {};
+option = null;
+///////////////////////// 自定义数值格式：
+// color 统一：
+var color = ['#c23531','#2f4554','#61a0a8','#d48265','#91c7ae','#749f83','#ca8622','#bda29a','#6e7074','#4d638c','#e9bba9','#7abed1','#b86c99','‘#ffc300']
+// 字体大小：
+var fontSize  = 20
+var title = {
+        text: '疫情谣言正负面占比', //名字
+        left:'center', //居中
+        top:150,
+        textStyle:{
+        fontSize:fontSize
+    }
+}
+// 图例，名称需要与series data里面的名称对应
+// var legend_data = ['病毒信息', '病毒传播', '疫情防控', '谣传国际', '其他']
+// var legend_data = ['Spread', 'Virus Info', 'Policy', 'International', 'Others']
+
+// ['negtive','postive','neutral']
+
+// series data 是图表的数据主体部分，是一个list of dict
+// name 与图例（legend）对应，
+// value值为该部分占比数值，和为100%
+// var series_data = [
+//                 {value: 16, name: '病毒信息'},
+//                 {value: 35, name: '病毒传播'},
+//                 {value: 226, name: '疫情防控'},
+//                 {value: 206, name: '谣传国际'},
+//                 {value: 81, name: '其他'}
+//             ]
+var series_data = [
+                
+                // {value: 111, name: 'Positive 111'},
+                // {value: 269, name: 'Negative 269'},
+                // {value: 69, name: 'Neutral 69'},
+
+                {value: 35, name: 'Spread 35'},
+                {value: 16, name: 'Virus Info 16'},
+                {value: 226, name: 'Policy 226'},
+                {value: 206, name: 'Oversea Events 206'},
+                {value: 81, name: 'Others 81'},
+                
+            ]
+// //////////////end of 自定义数值格式
+option = {
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    // title: title,
+    color:color,
+    textStyle:{
+        fontSize:fontSize
+    },
+    tooltip: {
+        trigger: 'item',
+    },
+    // legend: {
+    //     orient: 'vertical',
+    //     right: 150,
+    //     bottom:100
+    //     // data: legend_data
+    // },
+    series: [
+        {
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: series_data,
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

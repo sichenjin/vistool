@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom,null, {renderer: 'svg'});
+
+var app = {};
+option = null;
+var fontSize  = 20
+var color = ['#c23531','#2f4554','#61a0a8','#d48265','#91c7ae','#749f83','#ca8622','#bda29a','#6e7074','#4d638c','#e9bba9','#7abed1','#b86c99','‘#ffc300']
+
+var title = {
+        text: '谣言分析', //名字
+        left:'center', //居中
+        // top:150,
+        textStyle:{
+        fontSize:fontSize
+    }
+}
+// 数据：list of list, 每一个list是一组数据
+var data = echarts.dataTool.prepareBoxplotData([
+    [850, 740, 900, 1070, 930, 850, 950, 980, 980, 880, 1000, 980, 930, 650, 760, 810, 1000, 1000, 960, 960],
+    [960, 940, 960, 940, 880, 800, 850, 880, 900, 840, 830, 790, 810, 880, 880, 830, 800, 790, 760, 800],
+    [880, 880, 880, 860, 720, 720, 620, 860, 970, 950, 880, 910, 850, 870, 840, 840, 850, 840, 840, 840],
+    [890, 810, 810, 820, 800, 770, 760, 740, 750, 760, 910, 920, 890, 860, 880, 720, 840, 850, 850, 780],
+    [890, 840, 780, 810, 760, 810, 790, 810, 820, 850, 870, 870, 810, 740, 810, 940, 950, 800, 810, 870]
+]);
+
+option = {
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    title: title,
+    textStyle:{
+        fontSize:fontSize
+    },
+    tooltip: {
+        trigger: 'item',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    grid: {
+        left: '10%',
+        right: '10%',
+        bottom: '15%'
+    },
+    xAxis: {
+        type: 'category',
+        data: data.axisData,
+        boundaryGap: true,
+        nameGap: 30,
+        splitArea: {
+            show: false
+        },
+        axisLabel: {
+            fontSize:fontSize,
+            // rotate:40,
+            // margin:17,
+            formatter: 'expr {value}'   //自定义X轴坐标format
+        },
+        splitLine: {
+            show: false
+        }
+    },
+    yAxis: {
+        type: 'value',
+        name: 'y value',   //y轴标签
+        splitArea: {
+            show: true
+        },
+        axisLabel: {
+            fontSize:fontSize,
+        },
+    },
+    series: [
+        {
+            name: 'boxplot',
+            type: 'boxplot',
+            data: data.boxData,
+            // itemStyle:{
+            //     borderColor: "#000" //箱线图颜色
+            // },
+            tooltip: {
+                formatter: function (param) {   //tooltip 格式
+                    return [
+                        'Experiment ' + param.name + ': ',
+                        'upper: ' + param.data[5],
+                        'Q3: ' + param.data[4],
+                        'median: ' + param.data[3],
+                        'Q1: ' + param.data[2],
+                        'lower: ' + param.data[1]
+                    ].join('<br/>');
+                }
+            }
+        },
+        {
+            name: 'outlier',
+            type: 'scatter',
+            data: data.outliers
+        }
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

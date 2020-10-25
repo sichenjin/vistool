@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom,null, {renderer: 'svg'});
+
+var app = {};
+option = null;
+
+///////////////////////// 自定义数值格式;
+// color 统一：
+var color = ['#c23531','#2f4554','#61a0a8','#d48265','#91c7ae','#749f83','#ca8622','#bda29a','#6e7074','#4d638c','#e9bba9','#7abed1','#b86c99','‘#ffc300']
+// 字体大小：
+var fontSize  = 20
+var title = {
+        text: '散点图', //名字
+        left:'center', //居中
+        textStyle:{
+        fontSize:fontSize
+    }
+}
+//series 是图表的数据主体部分，是一个list of dict
+// name 与图例（legend）对应，
+// type 表示需要画的图形，这里我们选择散点图，所以是scatter,effectScatter 是具有特效的点
+// symbolSize是点的大小，可根据数据自定义返回点的大小
+// 每一个dict是一条组数据，这里data以list形式呈现：
+// 每一个list是一个点，[x,y,...],第一个值为点X坐标,第二个值为点Y坐标,后面数值自定义,可用于决定点的大小、颜色等其他属性
+var series_data = [{
+        type: 'effectScatter',
+        symbolSize: 20, //固定点的大小
+        data: [
+            [172.7, 105.2,10],
+            [153.4, 42,10]
+        ]
+    }, {
+        type: 'scatter',
+        symbolSize: function (data) {
+            return data[2]*5; //list中第三个值*5为点的大小 
+        },
+        data: [[161.2, 51.6,10], [167.5, 59.0,20], [159.5, 49.2,5], [157.0, 63.0,9], [155.8, 53.6,10],
+            [170.0, 59.0,10], [159.1, 47.6,10], [166.0, 69.8,10]],
+    }]
+// /////////////////////////////
+option = {
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    title:title,
+    color:color,
+    textStyle:{
+        fontSize:fontSize
+    },
+    xAxis: {
+        axisLabel :{
+            fontSize:fontSize,
+            // rotate:0 //需要选转的角度，防止标签之间重叠
+        },
+        scale: true //是否是脱离 0 值比例。设置成 true 后坐标刻度不会强制包含零刻度。
+    },
+    yAxis: {
+        axisLabel :{
+            fontSize:fontSize,
+            // rotate:0 //需要选转的角度，防止标签之间重叠
+        },
+        scale: true //是否是脱离 0 值比例。设置成 true 后坐标刻度不会强制包含零刻度。
+    },
+    series: series_data
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
